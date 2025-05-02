@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Search</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;  
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;  
+            height: 100%;
+        }
+
+        header {
+            width: 100%;
+            background-color: #666666;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        main {
+            flex-grow: 1;  
+            padding: 2rem;
+        }
+
+        #search-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        #results {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .recipe-card {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .recipe-card:hover {
+            transform: scale(1.02);
+            background-color: #fff;
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .recipe-card h3 {
+            margin: 0.5rem 0 0;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            width: 100%;
+            background-color: #666666;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Find a Recipe</h1>
+    </header>
+
+    <main>
+        <div id="search-section">
+            <input type="text" id="query" placeholder="Search for a recipe..." />
+            <button id="search-btn">Search</button>
+        </div>
+        <div id="results"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Recipe Search App</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
