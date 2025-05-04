@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarked Recipes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+
+    .recipe-card {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .recipe-card h3 {
+      margin: 0.5rem 0;
+    }
+
+    .recipe-card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .message {
+      font-size: 1.2rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Bookmarked Recipes</h1>
+  <div id="message" class="message">Loading...</div>
+  <div id="bookmark-list"></div>
+  <script src="bookmarks.js" defer></script>
+</body>
+</html>

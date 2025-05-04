@@ -18,18 +18,32 @@
       max-width: 100%;
       border-radius: 8px;
     }
+
+    #bookmark-button {
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      background-color: #f57c00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #bookmark-button:hover {
+      background-color: #ef6c00;
+    }
   </style>
 </head>
 <body>
   <div class="recipe-container">
     <h1 id="recipe-title">Loading...</h1>
     <img id="recipe-image" alt="Recipe Image">
+    <button id="bookmark-button">Bookmark This Recipe</button>
     <h3>Instructions</h3>
     <p id="recipe-instructions">Instructions</p>
     <h3>Ingredients</h3>
     <ul id="recipe-ingredients">Ingredients</ul>
   </div>
-
   <script src="recipe.js"></script>
 </body>
 </html>

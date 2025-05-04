@@ -1,97 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Recipe Search</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;  
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Search</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;  
-            height: 100%;
-        }
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
 
-        header {
-            width: 100%;
-            background-color: #666666;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-        }
+    header {
+      width: 100%;
+      background-color: #666666;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
 
-        main {
-            flex-grow: 1;  
-            padding: 2rem;
-        }
+    header h1 {
+      margin: 0;
+    }
 
-        #search-section {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    #user-controls {
+      display: flex;
+      gap: 1rem;
+    }
 
-        #results {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
+    #user-controls span {
+      font-weight: bold;
+    }
 
-        .recipe-card {
-            border: 1px solid #ccc;
-            padding: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-        }
+    button {
+      background-color: #ffffff;
+      color: #666666;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
 
-        .recipe-card:hover {
-            transform: scale(1.02);
-            background-color: #fff;
-        }
+    main {
+      flex-grow: 1;
+      padding: 2rem;
+    }
 
-        .recipe-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
+    #search-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-        .recipe-card h3 {
-            margin: 0.5rem 0 0;
-            font-size: 1.1rem;
-        }
+    #results {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
 
-        footer {
-            width: 100%;
-            background-color: #666666;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-        }
-    </style>
+    .recipe-card {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .recipe-card:hover {
+      transform: scale(1.02);
+      background-color: #fff;
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .recipe-card h3 {
+      margin: 0.5rem 0 0;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      width: 100%;
+      background-color: #666666;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>Find a Recipe</h1>
-    </header>
+  <header>
+    <h1>Find a Recipe</h1>
+    <div>
+        <button id="bookmark-btn" onclick="location.href='bookmarks.html'">Bookmarks</button>
+    </div>
+    <div id="user-controls">
+      <span id="greeting">Loading...</span>
+      <button id="login-btn" onclick="location.href='login.html'">Login</button>
+      <button id="logout-btn" style="display: none;">Logout</button>    
+    </div>
 
-    <main>
-        <div id="search-section">
-            <input type="text" id="query" placeholder="Search for a recipe..." />
-            <button id="search-btn">Search</button>
-        </div>
-        <div id="results"></div>
-    </main>
+  </header>
 
-    <footer>
-        <p>&copy; 2025 Recipe Search App</p>
-    </footer>
+  <main>
+    <div id="search-section">
+      <input type="text" id="query" placeholder="Search for a recipe..." />
+      <button id="search-btn">Search</button>
+    </div>
+    <div id="results"></div>
+  </main>
 
-    <script src="main.js"></script>
+  <footer>
+    <p>&copy; 2025 Recipe Search App</p>
+  </footer>
+
+  <script src="home.js"></script>
 </body>
 </html>

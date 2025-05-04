@@ -56,3 +56,43 @@ document.getElementById('query').addEventListener('click', async () => {
     })
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const greeting = document.getElementById('greeting');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+
+    // Check if the user is logged in
+    try {
+        const res = await fetch('/api/user');
+        const data = await res.json();
+
+        if (data.username) {
+            // User is logged in
+            greeting.textContent = `Hello, ${data.username}`;
+            loginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+            
+            bookmarkBtn.style.display = 'inline-block';
+        
+            // Logout functionality
+            logoutBtn.addEventListener('click', async () => {
+                await fetch('/logout', { method: 'POST' });
+                greeting.textContent = 'Hello, Guest';
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                alert('You are now logged out.');
+            });
+        } else {
+            // User is not logged in
+            greeting.textContent = 'Hello, Guest';
+            loginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+        }
+        
+    } catch (err) {
+        console.error('Error fetching user:', err);
+        greeting.textContent = 'Hello, Guest';
+    }
+});
+
