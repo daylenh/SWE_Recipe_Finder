@@ -1,3 +1,12 @@
+/**
+ * @function
+ * @descroption Handles user registration and login.
+ * This script listens for form submissions for both registration and login.
+ * It sends the form data to the server and displays success or error messages based on the response.
+ * @event submit - Handles form submission for registration and login.
+ * @param {Event} e - The event object for the form submission.
+ * @returns {void}
+ */
 document.getElementById('registerForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const username = document.getElementById('regUsername').value;
@@ -13,6 +22,15 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     messageBox.style.color = data.success ? 'green' : 'red';
 });
 
+/**
+ * @function
+ * @description Handles user login.
+ * This script listens for the login form submission, sends the credentials to the server,
+ * and displays a success or error message based on the response.
+ * @event submit - Handles form submission for login.
+ * @param {Event} e - The event object for the form submission.
+ * @returns {void}
+ */
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const username = document.getElementById('loginUsername').value;
@@ -25,6 +43,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const data = await res.json();
     const messageBox = document.getElementById('loginMessage');
     if (res.ok && data.success) {
+        localStorage.setItem('username', data.username);
         messageBox.textContent = 'Logged in!';
         messageBox.style.color = 'green';
         window.location.href = '/home.html'; 
@@ -33,22 +52,3 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         messageBox.style.color = 'red';
     }
 });
-
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await response.json();
-    if (response.ok) {
-      localStorage.setItem('username', username);
-      window.location.href = '/';
-    } else {
-      alert(data.message || 'Login failed.');
-    }
-  });
-  

@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Login / Register</title>
+  <!-- 
+    Styles for the login and registration page
+    This page allows users to register or log in to their account
+  -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -66,7 +70,14 @@
   </style>
 </head>
 <body>
+  <!--
+    Main wrapper for the login and registration forms
+  -->
   <div class="wrapper">
+    <!--
+      Registration form
+      Users can create a new account here
+    -->
     <form id="registerForm" class="form-box">
       <h2>Register</h2>
       <input type="text" id="regUsername" placeholder="Username" required>
@@ -74,6 +85,10 @@
       <button type="submit">Register</button>
       <div id="registerMessage" class="message"></div>
     </form>
+    <!--
+      Login form
+      Users can log in to their existing account here
+    -->
     <form id="loginForm" class="form-box">
       <h2>Login</h2>
       <input type="text" id="loginUsername" placeholder="Username" required>
@@ -82,6 +97,9 @@
       <div id="loginMessage" class="message"></div>
     </form>
   </div>
+  <!--
+    scripts for handling login and registration
+  -->
   <script src="login.js"></script>
 </body>
 </html>

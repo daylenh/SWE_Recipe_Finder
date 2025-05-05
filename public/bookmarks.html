@@ -4,41 +4,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookmarked Recipes</title>
+  <!--
+    Styles for the bookmarked recipes page
+    This page displays a list of recipes that the user has bookmarked
+    It includes a header, message, and recipe cards with options to view or remove bookmarks
+  -->
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       padding: 2rem;
+      background-color: #f4f4f9;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
     }
 
     .recipe-card {
       border: 1px solid #ccc;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 8px;
-      background-color: #f9f9f9;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .recipe-card:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .recipe-card h3 {
       margin: 0.5rem 0;
+      font-size: 1.5rem;
+      color: #333;
+      text-align: center;
     }
 
     .recipe-card img {
       max-width: 100%;
       height: auto;
-      border-radius: 4px;
+      border-radius: 8px;
     }
 
     .message {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       color: #666;
       text-align: center;
+      margin-bottom: 2rem;
     }
+
+    .button {
+      background-color: #f57c00;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin: 0.5rem 0;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      width: 100%;
+    }
+
+    .button:hover {
+      background-color: #ef6c00;
+      transform: scale(1.05);
+    }
+
+    .remove-btn {
+      background-color: #d32f2f;
+    }
+
+    .remove-btn:hover {
+      background-color: #c62828;
+    }
+
+    .recipe-card button {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+
+    .recipe-card button + button {
+      margin-top: 1rem;
+    }
+
+    .recipe-card .view-recipe-btn {
+      background-color: #f57c00;
+    }
+
+    .recipe-card .view-recipe-btn:hover {
+      background-color: #ef6c00;
+      transform: scale(1.05);
+    }
+
   </style>
 </head>
 <body>
+  <!-- 
+  Header for the bookmarked recipes page 
+   -->
   <h1>Your Bookmarked Recipes</h1>
+  <!--
+  Message to display while loading bookmarks
+  -->
   <div id="message" class="message">Loading...</div>
+  <!--
+  Container for the list of bookmarked recipes
+  -->
   <div id="bookmark-list"></div>
+  <!--  
+  Script to handle the bookmarks functionality
+  -->
   <script src="bookmarks.js" defer></script>
 </body>
 </html>

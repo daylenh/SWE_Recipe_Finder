@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Recipe Details</title>
+  <!--
+    Styles for the recipe details page
+  -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,11 +15,22 @@
     .recipe-container {
       max-width: 600px;
       margin: auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px  8x rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     img {
       max-width: 100%;
       border-radius: 8px;
+      margin-bottom: 1rem;
     }
 
     #bookmark-button {
@@ -27,23 +41,76 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      display: block;
+      width: 100%;
     }
 
     #bookmark-button:hover {
       background-color: #ef6c00;
     }
+
+    .section {
+      background-color: #fafafa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .section h3 {
+      margin-top: 0;
+    }
+
+    #recipe-ingredients {
+      line-height: 1.6;
+    }
+
+    #recipe-instructions {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    #recipe-instructions li {
+      margin-bottom: 0.5rem;
+      background-color: #f0f0f0;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+    
   </style>
 </head>
 <body>
-  <div class="recipe-container">
-    <h1 id="recipe-title">Loading...</h1>
-    <img id="recipe-image" alt="Recipe Image">
-    <button id="bookmark-button">Bookmark This Recipe</button>
-    <h3>Instructions</h3>
-    <p id="recipe-instructions">Instructions</p>
-    <h3>Ingredients</h3>
-    <ul id="recipe-ingredients">Ingredients</ul>
-  </div>
+  <!--  
+    Main structure of the recipe details page
+  -->
+    <div class="recipe-container">
+      <h1 id="recipe-title">Loading...</h1>
+      <!--
+        Title and image of the recipe as well as bookmark button
+      -->
+      <div class="section">
+        <img id="recipe-image" alt="Recipe Image">
+        <button id="bookmark-button">Bookmark This Recipe</button>
+      </div>
+      <!-- 
+        Sections for instructions and ingredients
+      -->
+      <div class="section">
+        <h3>Instructions</h3>
+        <p id="recipe-instructions">Instructions</p>
+      </div>
+      <!--  
+        Ingredients section with a list of ingredients
+      -->
+      <div class="section">
+        <h3>Ingredients</h3>
+        <ul id="recipe-ingredients">Ingredients</ul>
+      </div>
+    </div>
+    <!-- 
+      Script to handle recipe details and bookmarking functionality
+    -->
   <script src="recipe.js"></script>
 </body>
 </html>
