@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('Error fetching recipe details:', error);
         const titleElem = document.getElementById('recipe-title');
+        titleElem.innerText = data.title || 'Recipe Not Found';
         if (titleElem) {
             titleElem.innerText = 'Failed to load recipe details.';
         }

@@ -1,23 +1,22 @@
 /**
- * @fileoverview Server-side code for a recipe application using Express.js.
+ * @file server.js Recipe search and bookmark express server
+ * @description This server handles user registration, login, recipe search, and bookmarking functionality.
+ *             It uses SQLite for user and bookmark storage and Spoonacular API for recipe data.
  */
 import express from 'express';
 import fetch from 'node-fetch';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import path from 'path';
 import session from 'express-session';
 
 const app = express();
 const port = 3000;
 const SPOONACULAR_API_KEY = '0dc9b19d5d3a4a28a9e2f880dff28268';
 
-//Middleware to serve static files and parse JSON and URL-encoded data
+//middleware
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-//Configure session management
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -25,13 +24,17 @@ app.use(session({
     cookie: { secure: false } 
 }));
 
-//Database setup using SQLite
+/**
+ * SQL database connection
+ */
 const dbPromise = open({
     filename: './database/users.db',
     driver: sqlite3.Database
 });
 
-//Create tables for users and bookmarks if they do not exist
+/**
+ * table creation 
+ */
 (async () => {
     try {
         const db = await dbPromise;
@@ -53,18 +56,18 @@ const dbPromise = open({
             );
         `);
 
-        console.log('Tables created or already exists.');
+        console.log('Users table created or already exists.');
     } catch (err) {
         console.error('Error creating table:', err);
     }
 })();
 
 /**
- * API endpoint to search for recipes using the Spoonacular API.
- * 
- * @param {string} query - The search term for recipes.
- * @returns {Object} - A JSON object containing an array of recipes.
- * @throws {Error} - If the Spoonacular API request fails or returns no results.
+ * @route GET /api/recipes
+ * @description Fetches recipes from the Spoonacular API based on a search query.
+ * @param {string} query - The search query for recipes.
+ * @returns {object} - An object containing an array of recipes.
+ * @throws {Error} - If the Spoonacular API request fails or if no recipes are found.
  */
 app.get('/api/recipes', async (req, res) => {
     const query = req.query.query || ''; 
@@ -92,11 +95,11 @@ app.get('/api/recipes', async (req, res) => {
 });
 
 /**
- * API endpoint to fetch detailed information about a specific recipe by its ID.
- * 
+ * @route GET /api/recipe/:id
+ * @description Fetches detailed information about a specific recipe from the Spoonacular API.
  * @param {string} id - The ID of the recipe to fetch.
- * @returns {Object} - A JSON object containing detailed information about the recipe.
- * @throws {Error} - If the Spoonacular API request fails or returns an error.
+ * @returns {object} - An object containing detailed information about the recipe.
+ * @throws {Error} - If the Spoonacular API request fails or if the recipe is not found.
  */
 app.get('/api/recipe/:id', async (req, res) => {
     const recipeId = req.params.id;
@@ -123,10 +126,11 @@ app.get('/api/recipe/:id', async (req, res) => {
 });
 
 /**
- * API endpoint to register a new user.
- * 
- * @param {Object} req.body - The username and password for the new user.
- * @returns {Object} - A JSON object indicating success or failure of the registration.
+ * @route POST /api/register
+ * @description Registers a new user by inserting their username and password into the database.
+ * @param {string} username - The username of the new user.
+ * @param {string} password - The password of the new user.
+ * @returns {object} - A success message or an error message if the registration fails.
  * @throws {Error} - If the username is already taken or if there is a server error.
  */
 app.post('/api/register', async (req, res) => {
@@ -148,11 +152,11 @@ app.post('/api/register', async (req, res) => {
 });
 
 /**
- * API endpoint to log in a user.
- * 
- * @param {Object} req.body - The username and password for the user.
- * @returns {Object} - A JSON object indicating success or failure of the login.
- * @throws {Error} - If the credentials are invalid or if there is a server error.
+ * @route POST /api/login
+ * @description Authenticates a user by checking their username and password against the database.
+ * @param {string} username - The username of the user.
+ * @param {string} password - The password of the user.
+ * @returns {object} - A success message with the username or an error message if authentication fails.
  */
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
@@ -167,10 +171,10 @@ app.post('/api/login', async (req, res) => {
 });
 
 /**
- * API endpoint to check if a user session is active.
- * 
- * @peturns {Object} - A JSON object containing the username if logged in, or null if not.
- * @throws {Error} - If there is an error checking the session.
+ * @route GET /api/check-session
+ * @description Checks if a user is logged in by verifying the session.
+ * @param {string} username - The username of the user.
+ * @returns {object} - An object containing the username if logged in, or null if not.
  */
 app.get('/api/check-session', (req, res) => {
     if (req.session.user) {
@@ -181,21 +185,20 @@ app.get('/api/check-session', (req, res) => {
 });
 
 /**
- * Serves the home page of the application. to the user 
- * @param {Object} req - The request object containing session information.
- * @param {Object} res - The response object to send the home.html file.
- * @returns {Object} - the home.html file to user 
+ * @route GET /
+ * @description Renders the home page.
+ * @param {string} username - The username of the logged-in user.
+ * @returns {object} - The rendered home page with the username.
  */
 app.get('/', (req, res) => {
     const username = req.session.user || 'Guest';
-    res.sendFile(path.join(process.cwd(), 'public', 'home.html'));  
+    res.render('home', { username }); 
 });
 
 /**
- * API endpoint to get the current logged-in user.
- * @param {Object} req - The request object containing session information.
- * @param {Object} res - The response object to send the username.
- * @return {Object} - A JSON object containing the username if logged in, or null if not.
+ * @route GET /api/user
+ * @description Fetches the current logged-in user from the session.
+ * @returns {object} - An object containing the username if logged in, or null if not.
  */
 app.get('/api/user', (req, res) => {
     if (req.session.user) {
@@ -206,10 +209,9 @@ app.get('/api/user', (req, res) => {
 });
 
 /**
- * API endpoint for logging out a user.
- * @param {Object} req - The request object containing session information.
- * @param {Object} res - The response object to send the logout status.
- * @return {Object} - A JSON object indicating success or failure of the logout.
+ * @route POST /logout
+ * @description Logs out the user by destroying the session.
+ * @returns {object} - A success message or an error message if logout fails.
  */
 app.post('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -221,33 +223,61 @@ app.post('/logout', (req, res) => {
 });
 
 /**
- * API endpoint fetching bookmarks for the logged-in user.
- * @param {Object} req - The request object containing session information.
- * @param {Object} res - The response object to send the bookmarks.
- * @return {Object} - A JSON object containing an array of bookmarks for the user.
- * @throws {Error} - If the user is not logged in or if there is a server error.
+ * @route GET /api/bookmarks
+ * @description Fetches bookmarks for a specific user from the database.
+ * @param {string} username - The username of the user whose bookmarks to fetch.
+ * @returns {object} - An object containing an array of bookmarks for the user.
+ * @throws {Error} - If the username is not provided or if there is a server error.
  */
 app.get('/api/bookmarks', async (req, res) => {
-    if (!req.session.user) {
-        return res.status(401).json({ error: 'User not logged in' });
+    const username = req.query.username;
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
     }
-
-    const username = req.session.user;
     try {
-        const db = await dbPromise;
-        const bookmarks = await db.all('SELECT * FROM bookmarks WHERE username = ?', [username]);
-        res.json({ bookmarks });
+      const db = await dbPromise;
+      const bookmarks = await db.all('SELECT * FROM bookmarks WHERE username = ?', [username]);
+      res.json({ bookmarks });
     } catch (err) {
-        console.error('Error fetching bookmarks:', err);
-        res.status(500).json({ error: 'Failed to fetch bookmarks' });
+      console.error('Error fetching bookmarks:', err);
+      res.status(500).json({ error: 'Failed to fetch bookmarks' });
     }
 });
 
 /**
- * API endpoint to add a bookmark for a recipe.
- * @param {Object} req.body - The bookmark data including username, title, image, and sourceUrl.
- * @return {Object} - A JSON object indicating success or failure of the bookmark addition.
- * @throws {Error} - If the user is not logged in, or if there is a server error.
+ * @route POST /api/bookmarks
+ * @description Saves a new bookmark for a user in the database.
+ * @param {string} username - The username of the user.
+ * @param {string} title - The title of the bookmark.
+ * @param {string} image - The image URL of the bookmark.
+ * @param {string} sourceUrl - The source URL of the bookmark.
+ * @returns {object} - A success message or an error message if saving fails.
+ * @throws {Error} - If any required fields are missing or if there is a server error.
+ */
+app.post('/api/bookmarks', async (req, res) => {
+    const { username, title, image, sourceUrl } = req.body;
+    if (!username || !title || !image || !sourceUrl) {
+        return res.status(400).json({ message: 'Missing fields' });
+    }
+    try {
+        const db = await dbPromise;
+        await db.run(
+            `INSERT INTO bookmarks (username, title, image, sourceUrl) VALUES (?, ?, ?, ?)`,
+            [username, title, image, sourceUrl]
+        );
+        res.status(201).json({ message: 'Bookmark saved' });
+    } catch (error) {
+        console.error('Failed to save bookmark:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+/**
+ * @route GET /api/bookmarks/:username
+ * @description Fetches bookmarks for a specific user from the database.
+ * @param {string} username - The username of the user whose bookmarks to fetch.
+ * @returns {object} - An object containing an array of bookmarks for the user.
+ * @throws {Error} - If the username is not provided or if there is a server error.
  */
 app.get('/api/bookmarks/:username', async (req, res) => {
     const { username } = req.params;
@@ -264,19 +294,20 @@ app.get('/api/bookmarks/:username', async (req, res) => {
 });
 
 /**
- * API endpoint to delete a  bookmark.
- * @param {Object} req.body - The bookmark data including username and sourceUrl.
- * @return {Object} - A JSON object indicating success or failure of the bookmark deletion.
- * @throws {Error} - If the required fields are missing or if there is a server error.
+ * @route DELETE /api/bookmarks
+ * @description Deletes a bookmark for a user from the database.
+ * @param {string} username - The username of the user.
+ * @param {string} sourceUrl - The source URL of the bookmark to delete.
+ * @returns {object} - A success message or an error message if deletion fails.
+ * @throws {Error} - If any required fields are missing or if there is a server error.
  */
 app.delete('/api/bookmarks', async (req, res) => {
     const { username, sourceUrl } = req.body;
     if (!username || !sourceUrl) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
-
     try {
-        const db = await dbPromise;
+        const db = await dbPromise; // ✅ FIX: Get the db instance
         await db.run('DELETE FROM bookmarks WHERE username = ? AND sourceUrl = ?', [username, sourceUrl]);
         res.json({ success: true });
     } catch (err) {
@@ -286,8 +317,9 @@ app.delete('/api/bookmarks', async (req, res) => {
 });
 
 /**
- * Starts the Express server and listens on the specified port.
- * @param {number} port - The port number on which the server will listen.
+ * @route GET /api/logout
+ * @description Logs out the user by destroying the session.
+ * @returns {object} - A success message or an error message if logout fails.
  */
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

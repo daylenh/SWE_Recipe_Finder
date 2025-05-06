@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Recipe Details</title>
-  <!--
+    <!--
     Styles for the recipe details page
   -->
   <style>
@@ -90,19 +90,20 @@
         Title and image of the recipe as well as bookmark button
       -->
       <div class="section">
-        <img id="recipe-image" alt="Recipe Image">
-        <button id="bookmark-button">Bookmark This Recipe</button>
-      </div>
       <!-- 
         Sections for instructions and ingredients
+      -->
+        <img id="recipe-image" alt="Recipe Image">
+        <button id="bookmark-button">Bookmark This Recipe</button>
+        <div id="message" style="color: red; margin-top: 10px;"></div>
+      </div>
+      <!--  
+        Ingredients section with a list of ingredients
       -->
       <div class="section">
         <h3>Instructions</h3>
         <p id="recipe-instructions">Instructions</p>
       </div>
-      <!--  
-        Ingredients section with a list of ingredients
-      -->
       <div class="section">
         <h3>Ingredients</h3>
         <ul id="recipe-ingredients">Ingredients</ul>

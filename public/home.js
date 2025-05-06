@@ -1,14 +1,24 @@
 /**
- * @function
- * @description Handles the search functionality for recipes on the home page.
- * @event DOMContentLoaded - Initializes the search functionality when the DOM is fully loaded.
+ * @function 
+ * @description This script handles the search functionality and user authentication state on the home page.
+ * It fetches recipes based on user input, displays them, and manages the login/logout state.
+ * @event DOMContentLoaded
  * @returns {void}
- * @throws Will log an error if the fetch request fails or if there is an issue displaying recipes.
+ * @throws Will log an error if fetching recipes or user data fails.
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const searchBtn = document.getElementById('search-btn');
     const queryInput = document.getElementById('query');
     const resultsContainer = document.getElementById('results');
+    const greeting = document.getElementById('greeting');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    /**
+     * @async
+     * @function
+     * @description Fetches recipes based on the user's search query and displays them.
+     */
     async function searchRecipes() {
         const query = queryInput.value.trim();
         if (!query) return;
@@ -22,12 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsContainer.innerHTML = '<p>Failed to fetch recipes.</p>';
         }
     }
-
     /**
      * @function
-     * @description Displays the list of recipes in the results container.
-     * @param {Array} recipes - An array of recipe objects to display.
-     * @returns {void}
+     * @description Displays the fetched recipes in the results container.
+     * @param {Array} recipes - The array of recipe objects to display. 
+     * @throws Will log an error if the recipes array is empty or undefined.
      */
     function displayRecipes(recipes) {
         resultsContainer.innerHTML = '';
@@ -45,55 +54,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     searchBtn.addEventListener('click', searchRecipes);
-    const greeting = document.getElementById('greeting');
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const bookmarkBtn = document.getElementById('bookmark-btn');
-
-    /**
-     * @function
-     * @description Fetches the current user's information and updates the greeting and button visibility.
-     * @returns {void}
-     * @throws Will log an error if the fetch request fails or if there is an issue with the response.
-     */
-    (async () => {
+    logoutBtn.addEventListener('click', async () => {
         try {
-            const res = await fetch('/api/user');
-            const data = await res.json();
-
-            if (data.username) {
-                greeting.textContent = `Hello, ${data.username}`;
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'inline-block';
-                bookmarkBtn.style.display = 'inline-block';
-
-                logoutBtn.addEventListener('click', async () => {
-                    try {
-                        const response = await fetch('/logout', { method: 'POST' });
-                        if (response.ok) {
-                            localStorage.removeItem('username');
-                            greeting.textContent = 'Hello, Guest';
-                            loginBtn.style.display = 'inline-block';
-                            logoutBtn.style.display = 'none';
-                            bookmarkBtn.style.display = 'none';
-                            alert('You are now logged out.');
-                            window.location.href = '/';
-                        } else {
-                            console.error('Logout failed');
-                        }
-                    } catch (error) {
-                        console.error('Error during logout:', error);
-                    }
-                });
-            } else {
-                greeting.textContent = 'Hello, Guest';
-                loginBtn.style.display = 'inline-block';
-                logoutBtn.style.display = 'none';
-                bookmarkBtn.style.display = 'none';
-            }
-        } catch (err) {
-            console.error('Error fetching user:', err);
+            await fetch('/logout', { method: 'POST' });
+            localStorage.clear();
             greeting.textContent = 'Hello, Guest';
+            loginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+            bookmarkBtn.style.display = 'none';
+            alert('You are now logged out.');
+        } catch (err) {
+            console.error('Logout failed:', err);
         }
-    })();
+    });
+    try {
+        const res = await fetch('/api/user');
+        const data = await res.json();
+        if (data.username) {
+            greeting.textContent = `Hello, ${data.username}`;
+            loginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+            bookmarkBtn.style.display = 'inline-block';
+        } else {
+            greeting.textContent = 'Hello, Guest';
+            loginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+            bookmarkBtn.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Error fetching user:', err);
+        greeting.textContent = 'Hello, Guest';
+    }
 });

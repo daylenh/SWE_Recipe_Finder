@@ -1,10 +1,8 @@
 /**
  * @function
- * @descroption Handles user registration and login.
- * This script listens for form submissions for both registration and login.
- * It sends the form data to the server and displays success or error messages based on the response.
- * @event submit - Handles form submission for registration and login.
- * @param {Event} e - The event object for the form submission.
+ * @description Handles the login and registration process for the user.
+ * It listens for form submissions, sends the data to the server, and handles the response.
+ * @event DOMContentLoaded
  * @returns {void}
  */
 document.getElementById('registerForm').addEventListener('submit', async function (e) {
@@ -24,13 +22,12 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
 /**
  * @function
- * @description Handles user login.
- * This script listens for the login form submission, sends the credentials to the server,
- * and displays a success or error message based on the response.
- * @event submit - Handles form submission for login.
- * @param {Event} e - The event object for the form submission.
+ * @description Handles the login process for the user.
+ * It listens for form submissions, sends the data to the server, and handles the response.
+ * @event DOMContentLoaded
  * @returns {void}
- */
+ * @throws Will log an error if the login fails or if the server response is not as expected.
+*/
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const username = document.getElementById('loginUsername').value;

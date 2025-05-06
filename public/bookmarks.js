@@ -1,31 +1,27 @@
 /**
+ * @async
  * @function
- * @description Handles the display and management of bookmarked recipes.
- * This script fetches the user's bookmarks from the server and displays them on the page.
- * @event DOMContentLoaded - Initializes the bookmarks display when the DOM is fully loaded.
- * @returns {void}
- * @throws Will log an error if the session check fails or if fetching bookmarks fails.
+ * @description This script fetches and displays the user's bookmarked recipes from the server.
+ * It checks if the user is logged in, retrieves bookmarks from the server, and allows the user to remove bookmarks.
+ * @event DOMContentLoaded
+ * @throws Will log an error if the required DOM elements are not found or if fetching bookmarks fails.
  */
 document.addEventListener('DOMContentLoaded', async () => {
     const messageElement = document.getElementById('message');
     const bookmarkList = document.getElementById('bookmark-list');
-
     if (!messageElement || !bookmarkList) {
         console.error('Required DOM elements not found.');
         return;
     }
-
     try {
         const response = await fetch('/api/check-session');
         const data = await response.json();
         const username = data.username;
-
         if (!username) {
             messageElement.textContent = 'You must sign in to view your bookmarked recipes.';
             bookmarkList.innerHTML = '';
             return;
         }
-
         messageElement.textContent = 'Your Bookmarked Recipes:';
         await fetchBookmarks(username);
     } catch (err) {
@@ -35,16 +31,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
+ * @async
  * @function
- * @description Fetches the user's bookmarked recipes from the server.
- * @param {string} username - The username of the user whose bookmarks are to be fetched.
- * @returns {Promise<void>} - A promise that resolves when the bookmarks are fetched and displayed.
- * @throws Will log an error if the fetch request fails or if there is an issue with the response.
+ * @description Fetches the user's bookmarks from the server and displays them.
+ * @param {string} username - The username of the logged-in user.
+ * @throws Will log an error if the fetch request fails or if the response is not as expected.
  */
 async function fetchBookmarks(username) {
     const bookmarkList = document.getElementById('bookmark-list');
     const messageElement = document.getElementById('message');
-
     try {
         const response = await fetch(`/api/bookmarks?username=${encodeURIComponent(username)}`);
         const data = await response.json();
@@ -67,19 +62,16 @@ async function fetchBookmarks(username) {
 
 /**
  * @function
- * @description Displays the list of bookmarks on the page.
- * @param {Array} bookmarks - An array of bookmark objects to display.
- * @returns {void}
- * @throws Will log an error if there is an issue with the bookmark data.
+ * @description Displays the bookmarks in the bookmark list.
+ * @param {Array} bookmarks - The array of bookmark objects to display.
+ * @throws Will log an error if the bookmarks array is empty or undefined.
  */
 function displayBookmarks(bookmarks) {
     const bookmarkList = document.getElementById('bookmark-list');
-    bookmarkList.innerHTML = ''; 
-
+    bookmarkList.innerHTML = '';
     bookmarks.forEach(bookmark => {
         const bookmarkCard = document.createElement('div');
         bookmarkCard.className = 'recipe-card';
-
         bookmarkCard.innerHTML = `
             <h3>${escapeHtml(bookmark.title)}</h3>
             <img src="${bookmark.image}" alt="${escapeHtml(bookmark.title)} image" onerror="this.src='placeholder.jpg'">
@@ -88,12 +80,10 @@ function displayBookmarks(bookmarks) {
                 <button class="button remove-btn">Remove Bookmark</button>
             </div>
         `;
-
         const removeBtn = bookmarkCard.querySelector('.remove-btn');
         removeBtn.addEventListener('click', async () => {
             const confirmDelete = confirm(`Remove "${bookmark.title}" from bookmarks?`);
             if (!confirmDelete) return;
-
             try {
                 const response = await fetch('/api/bookmarks', {
                     method: 'DELETE',
@@ -104,10 +94,9 @@ function displayBookmarks(bookmarks) {
                         sourceUrl: bookmark.sourceUrl
                     }),
                 });
-
                 if (response.ok) {
                     alert('Bookmark removed.');
-                    bookmarkCard.remove(); 
+                    bookmarkCard.remove();
                 } else {
                     alert('Failed to remove bookmark.');
                 }
@@ -116,7 +105,6 @@ function displayBookmarks(bookmarks) {
                 alert('An error occurred.');
             }
         });
-
         bookmarkList.appendChild(bookmarkCard);
     });
 }
@@ -124,7 +112,7 @@ function displayBookmarks(bookmarks) {
 /**
  * @function
  * @description Escapes HTML special characters in a string to prevent XSS attacks.
- * @param {string} text - The text to escape for HTML.
+ * @param {string} text - The text to escape. 
  * @returns {string} - The escaped HTML string.
  */
 function escapeHtml(text) {
