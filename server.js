@@ -307,7 +307,7 @@ app.delete('/api/bookmarks', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     try {
-        const db = await dbPromise; // ✅ FIX: Get the db instance
+        const db = await dbPromise;
         await db.run('DELETE FROM bookmarks WHERE username = ? AND sourceUrl = ?', [username, sourceUrl]);
         res.json({ success: true });
     } catch (err) {
